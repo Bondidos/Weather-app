@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+struct CurrentWeather {
+    let timeStamp: Int
+    let name: String
+    let temp: Double
+    let feelsLike: Double
+    let tempMin: Double
+    let tempMax: Double
+    let weather: Weather
+}

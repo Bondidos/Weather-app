@@ -86,6 +86,16 @@
         }
       }
     },
+    "Hello, world!" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Привет мир"
+          }
+        }
+      }
+    },
     "Hours" : {
       "extractionState" : "manual",
       "localizations" : {

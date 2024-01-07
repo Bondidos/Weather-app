@@ -16,6 +16,7 @@ struct AppResText: View {
     
     var body: some View {
         Text(stringRes.rawValue)
+            .foregroundColor(.white)
     }
 }
 

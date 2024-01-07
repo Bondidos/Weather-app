@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct WeatherCurrentWithForecast{
+    let currentWeather: CurrentWeather
+    let dailyForecast: [DailyForecast]
+    let hourlyForecast: [HourlyForecast]
+}

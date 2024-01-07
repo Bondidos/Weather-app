@@ -8,13 +8,20 @@
 import SwiftUI
 
 struct MainScreen: View {
+    
+    @State var mainScreenState: MainScreenState
+    
     var body: some View {
         ScrollView {
             AppResText(.Days)
         }
+        .frame(maxWidth: .infinity,maxHeight: .infinity)
+        .background(Color(.li))
     }
 }
 
 #Preview {
-    MainScreen()
+    MainScreen(
+        mainScreenState: MainScreenState(nil, .error)
+    )
 }

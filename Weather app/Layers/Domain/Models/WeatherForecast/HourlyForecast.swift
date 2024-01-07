@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct HourlyForecast {
+    let timeStamp: Int
+    let temp: Double
+    let weather: Weather
+}
