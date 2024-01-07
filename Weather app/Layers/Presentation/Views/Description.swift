@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct Description: View {
+    let description: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(description)
+            .font(.system(size: 27, weight: .medium))
+            .foregroundStyle(.white)
     }
 }
 
 #Preview {
-    Description()
+    Description(description: "clear sky")
 }

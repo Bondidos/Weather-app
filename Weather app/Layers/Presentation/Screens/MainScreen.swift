@@ -13,10 +13,47 @@ struct MainScreen: View {
     
     var body: some View {
         ScrollView {
-            AppResText(.Days)
+            
+            //todo fill stack from mainScreenState
+            CurrentWeatherView(
+                title: "Mountain View",
+                currentTemp: "47",
+                maxTemp: "53",
+                minTemp: "41",
+                description: "clear sky",
+                image: ._02D,
+                date: "Sat, Jan 6"
+            )
         }
         .frame(maxWidth: .infinity,maxHeight: .infinity)
-        .background(Color(.li))
+        .background(.mainBlue)
+    }
+}
+
+private struct CurrentWeatherView: View {
+    let title: String
+    let currentTemp: String
+    let maxTemp: String
+    let minTemp: String
+    let description: String
+    let image: ImageResource
+    let date: String
+    
+    var body: some View {
+        VStack(alignment: .center) {
+            Title(title: title)
+            Image(image)
+            CurrentTemp(temp: currentTemp)
+            MaxAndMinTempView(max: maxTemp, min: minTemp)
+            Description(description: description)
+            Spacer(minLength: 20)
+            HStack {
+                OpenWeatherStamp()
+                Spacer()
+                DateView(date: date)
+            }
+            .padding([.trailing, .leading])
+        }
     }
 }
 

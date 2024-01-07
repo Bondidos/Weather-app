@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct CurrentTemp: View {
+    let temp: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("\(temp)\u{00B0}")
+            .font(.system(size: 60))
+            .foregroundColor(.white)
+            .fontWeight(.medium)
     }
 }
 
 #Preview {
-    CurrentTemp()
+    CurrentTemp(temp: "55")
 }

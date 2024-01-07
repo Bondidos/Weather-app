@@ -9,7 +9,9 @@ import SwiftUI
 
 struct OpenWeatherStamp: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("openweathermap.org")
+            .font(.system(size: 14, weight: .medium))
+            .foregroundStyle(.white)
     }
 }
 

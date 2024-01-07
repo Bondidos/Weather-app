@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct MaxAndMinTempView: View {
+    let max: String
+    let min: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("\(max )\u{00B0}/\(min)\u{00B0}")
+            .font(.title)
+            .foregroundColor(.white)
+            .fontWeight(.medium)
+            
+            
     }
 }
 
 #Preview {
-    MaxAndMinTempView()
+    MaxAndMinTempView(
+        max: "53",
+        min: "41"
+    )
 }
