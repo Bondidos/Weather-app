@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+protocol WeatherRepository {
+    func fetchWeatherFromApi() -> WeatherCurrentWithForecast
+    func fetchCurrentWeatherForCity() -> CurrentWeather
+}

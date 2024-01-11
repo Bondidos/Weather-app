@@ -12,7 +12,7 @@ protocol WeatherApiService {
     func request(_ url: String, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?) -> DataRequest
 }
 
-class ApiServiceImpl: WeatherApiService {
+class WeatherApiServiceImpl: WeatherApiService {
     
     private let baseUrl = "http://api.openweathermap.org"
 
