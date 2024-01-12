@@ -8,27 +8,34 @@
 import Foundation
 import Alamofire
 
-protocol WeatherApiService {
-    func request(_ url: String, method: HTTPMethod, parameters: Parameters?, encoding: ParameterEncoding, headers: HTTPHeaders?) -> DataRequest
-}
-
-class WeatherApiServiceImpl: WeatherApiService {
+class WeatherApiService {
     
     private let baseUrl = "http://api.openweathermap.org"
-
+    private let applicationKey = "ef4301248bc32d17ddbdefee5fd5b72b"
+    private let applicationId = "appid"
+    
+    
     func request(
         _ url: String,
         method: HTTPMethod = .get,
         parameters: Parameters? = nil,
-        encoding: ParameterEncoding = URLEncoding.default,
-        headers: HTTPHeaders? = nil
-    ) -> DataRequest {
-        return AF.request(
+        encoding: ParameterEncoding = URLEncoding.default
+    ) throws -> Data {
+        let headers = HTTPHeaders([
+            HTTPHeader(name: applicationId, value: applicationKey)
+        ])
+        let result = AF.request(
             baseUrl + url,
             method: method,
             parameters: parameters,
             encoding: encoding,
             headers: headers
         )
+        if result.response?.statusCode == 200 {
+            if let data = result.data {
+                return data
+            }
+        }
+        throw CustomErrors.fetchDataRemouteError
     }
 }

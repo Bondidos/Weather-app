@@ -6,14 +6,20 @@
 //
 
 import Foundation
+import Resolver
 
 enum MainPageStatus { case initial, loading, loaded, error }
 
 struct MainScreenState {
-    init(_ weatherCurrentWithForecast: WeatherCurrentWithForecast?, _ status: MainPageStatus) {
-        self.weatherCurrentWithForecast = weatherCurrentWithForecast
-        self.status = status
+    @Injected var repo: WeatherRepository
+    
+    func fetchWeather() {
+        do {
+            let result = try repo.fetchCurrentWeatherInLocation()
+            print(result)
+
+        } catch {
+            print(error)
+        }
     }
-    let weatherCurrentWithForecast: WeatherCurrentWithForecast?
-    let status: MainPageStatus
 }

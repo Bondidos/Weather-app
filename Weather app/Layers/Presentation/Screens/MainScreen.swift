@@ -12,6 +12,7 @@ struct MainScreen: View {
     @State var mainScreenState: MainScreenState
     
     var body: some View {
+        
         ScrollView {
             //todo fill stack from mainScreenState
             CurrentWeatherView(
@@ -28,6 +29,9 @@ struct MainScreen: View {
             HourlyForecastCarousel()
             Divider()
             DailyForecstList()
+            Button ("SADASD"){
+                mainScreenState.fetchWeather()
+            }
         }
         .frame(maxWidth: .infinity,maxHeight: .infinity)
         .background(.mainBlue)
@@ -36,7 +40,7 @@ struct MainScreen: View {
 
 #Preview {
     MainScreen(
-        mainScreenState: MainScreenState(nil, .error)
+        mainScreenState: MainScreenState()
     )
 }
 

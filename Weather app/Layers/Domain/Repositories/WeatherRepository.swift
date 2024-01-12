@@ -8,6 +8,6 @@
 import Foundation
 
 protocol WeatherRepository {
-    func fetchWeatherFromApi() -> WeatherCurrentWithForecast
-    func fetchCurrentWeatherForCity() -> CurrentWeather
+    func fetchCurrentWeatherInLocation() throws -> CurrentWeather
+    func fetchHourlyWeatherForecast() -> WeatherForecast
 }

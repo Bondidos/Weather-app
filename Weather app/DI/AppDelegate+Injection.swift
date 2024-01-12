@@ -7,25 +7,28 @@
 
 import Foundation
 import Resolver
+import CoreLocation
 
 extension Resolver: ResolverRegistering {
     public static func registerAllServices() {
-        registerMyNetworkServices()
+        registerServices()
+        registerRepository()
         registerUseCases()
     }
 }
 
 extension Resolver {
-    public static func registerMyNetworkServices() {
-        register{ WeatherApiServiceImpl()}
-            .implements(WeatherApiService.self)
-        
-        register{WeatherRepositoryImpl(apiService: resolve())}
+    public static func registerServices() {
+        register { CLLocationManager()}
+        register { LocationService(locationManager: resolve()) }
+        register{ WeatherApiService()}
+    }
+    
+    public static func registerRepository() {
+        register{WeatherRepositoryImpl(apiService: resolve(), locationService: resolve())}
             .implements(WeatherRepository.self)
     }
-}
-
-extension Resolver {
+    
     public static func registerUseCases() {
         
     }
