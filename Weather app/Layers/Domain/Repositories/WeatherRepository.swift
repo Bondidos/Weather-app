@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol WeatherRepository {
-    func fetchCurrentWeatherInLocation() throws -> CurrentWeather
-    func fetchHourlyWeatherForecast() -> WeatherForecast
+    func fetchCurrentWeatherInLocation() throws -> Observable<CurrentWeather>
+    func fetchHourlyWeatherForecast() throws -> Observable<WeatherForecast>
 }

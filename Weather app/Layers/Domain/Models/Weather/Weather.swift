@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Weather: Codable {
+struct Weather {
     let id: Int
     let main: String
     let description: String

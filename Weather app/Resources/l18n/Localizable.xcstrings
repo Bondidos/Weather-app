@@ -127,6 +127,9 @@
         }
       }
     },
+    "Initializing" : {
+
+    },
     "LastUpdate" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import RxAlamofire
 import Alamofire
+import RxSwift
 
 class WeatherApiService {
     
@@ -14,28 +16,34 @@ class WeatherApiService {
     private let applicationKey = "ef4301248bc32d17ddbdefee5fd5b72b"
     private let applicationId = "appid"
     
-    
     func request(
         _ url: String,
         method: HTTPMethod = .get,
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default
-    ) throws -> Data {
+    ) -> Observable<Dictionary<String, Any>> {
         let headers = HTTPHeaders([
             HTTPHeader(name: applicationId, value: applicationKey)
         ])
-        let result = AF.request(
+        var params: Dictionary<String, Any> = [applicationId: applicationKey]
+        parameters?.forEach({ (key: String, value: Any) in
+            params[key] = value
+        })
+        
+        
+        return RxAlamofire.requestJSON(
+            method,
             baseUrl + url,
-            method: method,
-            parameters: parameters,
+            parameters: params,
             encoding: encoding,
             headers: headers
         )
-        if result.response?.statusCode == 200 {
-            if let data = result.data {
-                return data
+        .debug()
+        .map({ (response, json) in
+            switch response.statusCode {
+            case 200: return json as! Dictionary<String, Any>
+            default: throw CustomErrors.fetchDataRemouteError
             }
-        }
-        throw CustomErrors.fetchDataRemouteError
+        }).observe(on: MainScheduler.instance)
     }
 }

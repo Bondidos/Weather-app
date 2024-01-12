@@ -9,38 +9,54 @@ import SwiftUI
 
 struct MainScreen: View {
     
-    @State var mainScreenState: MainScreenState
+    @ObservedObject var mainScreenViewModel = MainScreenViewModel()
+    
+    var state: MainScreenState {
+        mainScreenViewModel.state
+    }
     
     var body: some View {
         
-        ScrollView {
-            //todo fill stack from mainScreenState
-            CurrentWeatherView(
-                title: "Mountain View",
-                currentTemp: "47",
-                maxTemp: "53",
-                minTemp: "41",
-                description: "clear sky",
-                image: ._02D,
-                date: "Sat, Jan 6"
-            )
-            Spacer(minLength: 10)
-            Divider()
-            HourlyForecastCarousel()
-            Divider()
-            DailyForecstList()
-            Button ("SADASD"){
-                mainScreenState.fetchWeather()
+        switch state {
+        case .initial:
+            Text("Initializing")
+                .onAppear{
+                    mainScreenViewModel.fetchWeather()
+                }
+        case .loading:
+            ProgressView()
+        case .loaded(let currentWeather):
+            ScrollView {
+                //TODO: MAPP IN VIEWMODEL
+                CurrentWeatherView(
+                    title: currentWeather.name,
+                    currentTemp: String(currentWeather.temp.rounded()),
+                    maxTemp: String(currentWeather.tempMax.rounded()),
+                    minTemp: String(currentWeather.tempMin.rounded()),
+                    description: currentWeather.weather.description,
+                    image: ImageResource(name: currentWeather.weather.icon, bundle: .main),
+                    date: DateFormatter().string(from: Date(timeIntervalSince1970: Double(currentWeather.timeStamp)))
+                )
+                Spacer(minLength: 10)
+                Divider()
+                HourlyForecastCarousel()
+                Divider()
+                DailyForecstList()
+                Button ("SADASD"){
+                    mainScreenViewModel.fetchWeather()
+                }
             }
+            .frame(maxWidth: .infinity,maxHeight: .infinity)
+            .background(.mainBlue)
+        case .error(let err):
+            Text(err)
         }
-        .frame(maxWidth: .infinity,maxHeight: .infinity)
-        .background(.mainBlue)
     }
 }
 
 #Preview {
     MainScreen(
-        mainScreenState: MainScreenState()
+        mainScreenViewModel: MainScreenViewModel()
     )
 }
 
@@ -112,6 +128,7 @@ private struct DailyForecstList: View {
                 icon: ._04N,
                 temp: "47\u{00B0}/41\u{00B0}"
             )
+            
             Divider()
         }
     }

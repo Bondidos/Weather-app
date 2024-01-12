@@ -7,19 +7,22 @@
 
 import Foundation
 import Resolver
+import RxSwift
 
 class WeatherRepositoryImpl: WeatherRepository {
-    init(apiService: WeatherApiService, locationService: LocationService) {
+    init(apiService: WeatherApiService, locationService: LocationService, parcer: WeatherRepositoryParcer) {
         self.apiService = apiService
-        self.locationService = locationService // TODO: move to separate repo???
+        self.locationService = locationService
+        self.parcer = parcer
     }
     
     private let apiService: WeatherApiService
     private let locationService: LocationService
+    private let parcer: WeatherRepositoryParcer
     
-    func fetchCurrentWeatherInLocation() throws -> CurrentWeather {
+    func fetchCurrentWeatherInLocation() throws -> Observable<CurrentWeather> {
         guard let latlong = locationService.getLatLong() else { throw CustomErrors.invalidLatLong }
-        let data = try apiService.request(
+        return apiService.request(
             WeatherApiEndpoints.currentWeatherInLocation,
             parameters: [
                 ApiParamsKeys.longitude: latlong.longitude,
@@ -27,11 +30,10 @@ class WeatherRepositoryImpl: WeatherRepository {
                 ApiParamsKeys.measurement: ApiParamsValues.measurementMetric, // TODO: getMetrics from locale
                 ApiParamsKeys.language: "ru", // TODO language from locale
             ]
-        )
-        return try JSONDecoder().decode(CurrentWeather.self, from: data)
+        ).map { self.parcer.toCurrentWeather(json: $0) }
     }
     
-    func fetchHourlyWeatherForecast() -> WeatherForecast {
-        WeatherForecast(hourly: [], daily: [])  // TODO: replace
+    func fetchHourlyWeatherForecast() throws -> Observable<WeatherForecast> {
+        throw CustomErrors.fetchDataRemouteError
     }
 }

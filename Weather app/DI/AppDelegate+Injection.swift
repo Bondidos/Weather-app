@@ -19,13 +19,13 @@ extension Resolver: ResolverRegistering {
 
 extension Resolver {
     public static func registerServices() {
-        register { CLLocationManager()}
-        register { LocationService(locationManager: resolve()) }
+        register { LocationService() }
         register{ WeatherApiService()}
     }
     
     public static func registerRepository() {
-        register{WeatherRepositoryImpl(apiService: resolve(), locationService: resolve())}
+        register { WeatherRepositoryParcer() }
+        register{WeatherRepositoryImpl(apiService: resolve(), locationService: resolve(), parcer: resolve())}
             .implements(WeatherRepository.self)
     }
     

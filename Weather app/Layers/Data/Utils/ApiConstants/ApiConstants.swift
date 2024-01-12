@@ -26,6 +26,6 @@ struct ApiParamsValues {
 }
 
 struct WeatherApiEndpoints {
-    static let currentWeatherInLocation = "/data/2.5/onecall"
+    static let currentWeatherInLocation = "/data/2.5/weather"
     
 }

@@ -10,7 +10,7 @@ import CoreLocation
 import Resolver
 
 class LocationService: NSObject, CLLocationManagerDelegate {
-    init(locationManager: CLLocationManager) {
+    override init() {
         super.init()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyReduced
@@ -19,11 +19,8 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
     
     private let locationManager = CLLocationManager()
-    var lastLocation: CLLocation?
     
     func getLatLong() -> LatLng? {
-        let a = locationManager.location
-        print(a)
         if let latlong = locationManager.location?.coordinate {
             return LatLng(latitude: latlong.latitude, longitude: latlong.longitude)
         }

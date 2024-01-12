@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrentWeather: Codable {
+struct CurrentWeather {
     let timeStamp: Int
     let name: String
     let temp: Double

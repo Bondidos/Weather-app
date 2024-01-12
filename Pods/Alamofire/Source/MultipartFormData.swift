@@ -24,9 +24,9 @@
 
 import Foundation
 
-#if canImport(MobileCoreServices)
+#if os(iOS) || os(watchOS) || os(tvOS)
 import MobileCoreServices
-#elseif canImport(CoreServices)
+#elseif os(macOS)
 import CoreServices
 #endif
 
@@ -213,7 +213,7 @@ open class MultipartFormData {
         //              Check 2 - is file URL reachable?
         //============================================================
 
-        #if !(os(Linux) || os(Windows) || os(Android))
+        #if !(os(Linux) || os(Windows))
         do {
             let isReachable = try fileURL.checkPromisedItemIsReachable()
             guard isReachable else {
@@ -455,11 +455,9 @@ open class MultipartFormData {
         inputStream.open()
         defer { inputStream.close() }
 
-        var bytesLeftToRead = bodyPart.bodyContentLength
-        while inputStream.hasBytesAvailable && bytesLeftToRead > 0 {
-            let bufferSize = min(streamBufferSize, Int(bytesLeftToRead))
-            var buffer = [UInt8](repeating: 0, count: bufferSize)
-            let bytesRead = inputStream.read(&buffer, maxLength: bufferSize)
+        while inputStream.hasBytesAvailable {
+            var buffer = [UInt8](repeating: 0, count: streamBufferSize)
+            let bytesRead = inputStream.read(&buffer, maxLength: streamBufferSize)
 
             if let streamError = inputStream.streamError {
                 throw AFError.multipartEncodingFailed(reason: .inputStreamReadFailed(error: streamError))
@@ -471,7 +469,6 @@ open class MultipartFormData {
                 }
 
                 try write(&buffer, to: outputStream)
-                bytesLeftToRead -= UInt64(bytesRead)
             } else {
                 break
             }
@@ -511,6 +508,20 @@ open class MultipartFormData {
         }
     }
 
+    // MARK: - Private - Mime Type
+
+    private func mimeType(forPathExtension pathExtension: String) -> String {
+        #if !(os(Linux) || os(Windows))
+        if
+            let id = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as CFString, nil)?.takeRetainedValue(),
+            let contentType = UTTypeCopyPreferredTagWithClass(id, kUTTagClassMIMEType)?.takeRetainedValue() {
+            return contentType as String
+        }
+        #endif
+
+        return "application/octet-stream"
+    }
+
     // MARK: - Private - Content Headers
 
     private func contentHeaders(withName name: String, fileName: String? = nil, mimeType: String? = nil) -> HTTPHeaders {
@@ -544,58 +555,3 @@ open class MultipartFormData {
         bodyPartError = AFError.multipartEncodingFailed(reason: reason)
     }
 }
-
-#if canImport(UniformTypeIdentifiers)
-import UniformTypeIdentifiers
-
-extension MultipartFormData {
-    // MARK: - Private - Mime Type
-
-    private func mimeType(forPathExtension pathExtension: String) -> String {
-        #if swift(>=5.9)
-        if #available(iOS 14, macOS 11, tvOS 14, watchOS 7, visionOS 1, *) {
-            return UTType(filenameExtension: pathExtension)?.preferredMIMEType ?? "application/octet-stream"
-        } else {
-            if
-                let id = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as CFString, nil)?.takeRetainedValue(),
-                let contentType = UTTypeCopyPreferredTagWithClass(id, kUTTagClassMIMEType)?.takeRetainedValue() {
-                return contentType as String
-            }
-
-            return "application/octet-stream"
-        }
-        #else
-        if #available(iOS 14, macOS 11, tvOS 14, watchOS 7, *) {
-            return UTType(filenameExtension: pathExtension)?.preferredMIMEType ?? "application/octet-stream"
-        } else {
-            if
-                let id = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as CFString, nil)?.takeRetainedValue(),
-                let contentType = UTTypeCopyPreferredTagWithClass(id, kUTTagClassMIMEType)?.takeRetainedValue() {
-                return contentType as String
-            }
-
-            return "application/octet-stream"
-        }
-        #endif
-    }
-}
-
-#else
-
-extension MultipartFormData {
-    // MARK: - Private - Mime Type
-
-    private func mimeType(forPathExtension pathExtension: String) -> String {
-        #if canImport(CoreServices) || canImport(MobileCoreServices)
-        if
-            let id = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as CFString, nil)?.takeRetainedValue(),
-            let contentType = UTTypeCopyPreferredTagWithClass(id, kUTTagClassMIMEType)?.takeRetainedValue() {
-            return contentType as String
-        }
-        #endif
-
-        return "application/octet-stream"
-    }
-}
-
-#endif
