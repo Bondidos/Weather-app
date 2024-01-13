@@ -14,6 +14,7 @@ struct ApiParamsKeys {
     static let measurement = "units"
     static let excludeFields = "exclude"
     static let cityName = "q"
+    static let limit = "limit"
 }
 
 struct ApiParamsValues {
@@ -28,4 +29,5 @@ struct ApiParamsValues {
 struct WeatherApiEndpoints {
     static let currentWeatherInLocation = "/data/2.5/weather"
     static let weatherForecastInLocation = "/data/2.5/onecall"
+    static let searchCity =  "/geo/1.0/direct"
 }

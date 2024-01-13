@@ -8,6 +8,8 @@
 import Foundation
 
 struct City {
+    let id: Int
     let name: String
     let country: String
+    let latlong: LatLng
 }

@@ -21,7 +21,7 @@ class WeatherApiService {
         method: HTTPMethod = .get,
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default
-    ) -> Observable<Dictionary<String, Any>> {
+    ) -> Observable<Any> {
         let headers = HTTPHeaders([
             HTTPHeader(name: applicationId, value: applicationKey)
         ])
@@ -41,7 +41,7 @@ class WeatherApiService {
         .debug()
         .map({ (response, json) in
             switch response.statusCode {
-            case 200: return json as! Dictionary<String, Any>
+            case 200: return json
             default: throw CustomErrors.fetchDataRemouteError
             }
         }).observe(on: MainScheduler.instance)

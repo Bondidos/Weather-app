@@ -24,6 +24,6 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         if let latlong = locationManager.location?.coordinate {
             return LatLng(latitude: latlong.latitude, longitude: latlong.longitude)
         }
-        return nil
+        return LatLng(latitude: 0.0, longitude: 0.0)
     }
 }

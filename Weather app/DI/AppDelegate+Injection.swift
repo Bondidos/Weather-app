@@ -26,12 +26,16 @@ extension Resolver {
     
     public static func registerRepository() {
         register { WeatherRepositoryParcer() }
+        register { SearchCityRepositoryParcer() }
         register{WeatherRepositoryImpl(apiService: resolve(), locationService: resolve(), parcer: resolve())}
             .implements(WeatherRepository.self)
+        register{SearchCityRepositoryImpl(apiService: resolve(), parcer: resolve())}
+            .implements(SearchCityRepository.self)
     }
     
     public static func registerUseCases() {
         register {InitMainScreenUseCase(repo: resolve())}
+        register{SearchCityUseCase(repo: resolve())}
     }
     
     public static func registerUiMapper() {

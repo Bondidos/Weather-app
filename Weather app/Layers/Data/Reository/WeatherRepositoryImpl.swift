@@ -30,7 +30,7 @@ class WeatherRepositoryImpl: WeatherRepository {
                 ApiParamsKeys.measurement: mesurement,
                 ApiParamsKeys.language: Locale.current.identifier,
             ]
-        ).map { self.parcer.toCurrentWeather(json: $0) }
+        ).map { self.parcer.toCurrentWeather(json: $0 as! Dictionary<String, Any>) }
     }
     
     func fetchHourlyWeatherForecast() throws -> Observable<WeatherForecast> {
@@ -43,7 +43,7 @@ class WeatherRepositoryImpl: WeatherRepository {
                 ApiParamsKeys.measurement: mesurement,
                 ApiParamsKeys.excludeFields: excludedFields
             ]
-        ).map { self.parcer.toWeatherForecast(json: $0)}
+        ).map { self.parcer.toWeatherForecast(json: $0 as! Dictionary<String, Any>)}
     }
     
     private func getLocation() throws -> LatLng {

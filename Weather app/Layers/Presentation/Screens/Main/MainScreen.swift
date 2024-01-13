@@ -24,21 +24,24 @@ struct MainScreen: View {
         case .loading:
             ProgressView()
         case .loaded(let state):
-            ScrollView {
-                CurrentWeatherView(
-                    title: state.title,
-                    currentTemp: state.currentTemp,
-                    maxTemp: state.maxTemp,
-                    minTemp: state.minTemp,
-                    description: state.description,
-                    image: state.image,
-                    date: state.date
-                )
-                Spacer(minLength: 10)
-                Divider()
-                HourlyForecastCarousel(hourlyForecast: state.hourlyForecast)
-                Divider()
-                DailyForecstList(dailyForecast: state.dailyForecast)
+            ZStack {
+                ScrollView {
+                    CurrentWeatherView(
+                        title: state.title,
+                        currentTemp: state.currentTemp,
+                        maxTemp: state.maxTemp,
+                        minTemp: state.minTemp,
+                        description: state.description,
+                        image: state.image,
+                        date: state.date
+                    )
+                    Spacer(minLength: 10)
+                    Divider()
+                    HourlyForecastCarousel(hourlyForecast: state.hourlyForecast)
+                    Divider()
+                    DailyForecstList(dailyForecast: state.dailyForecast)
+                }
+                SearchButton()
             }
             .frame(maxWidth: .infinity,maxHeight: .infinity)
             .background(.mainBlue)
