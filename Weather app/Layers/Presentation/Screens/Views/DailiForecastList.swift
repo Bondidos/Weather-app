@@ -7,12 +7,18 @@
 
 import SwiftUI
 
-struct DailiForecastList: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
-
-#Preview {
-    DailiForecastList()
+struct DailyForecstList: View {
+    let dailyForecast: [DailyForecastStateData]
+    
+   var body: some View {
+       ForEach(dailyForecast ,id: \.self.id) { forecast in
+           DailyForecastItem(
+            date: forecast.date,
+            description: forecast.description,
+            icon: forecast.icon,
+            temp: forecast.temp
+           )
+           Divider()
+       }
+   }
 }

@@ -7,12 +7,37 @@
 
 import SwiftUI
 
-struct CurrentWeather: View {
+struct CurrentWeatherView: View {
+    let title: String
+    let currentTemp: String
+    let maxTemp: String
+    let minTemp: String
+    let description: String
+    let image: ImageResource
+    let date: String
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .center) {
+            Title(title: title)
+            Image(image)
+            CurrentTemp(temp: currentTemp)
+            MaxAndMinTempView(max: maxTemp, min: minTemp)
+            Description(description: description)
+            Spacer(minLength: 20)
+            LastUpdateTimeView(date: date)
+        }
     }
 }
 
-#Preview {
-    CurrentWeather()
+private struct LastUpdateTimeView: View {
+    let date: String
+    
+    var body: some View {
+        HStack {
+            OpenWeatherStamp()
+            Spacer()
+            DateView(date: date)
+        }
+        .padding([.trailing, .leading])
+    }
 }

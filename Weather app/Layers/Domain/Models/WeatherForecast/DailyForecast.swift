@@ -9,7 +9,7 @@ import Foundation
 
 struct DailyForecast {
     let timeStamp: Int
-    let  minTemp: Double
+    let minTemp: Double
     let maxTemp: Double
     let weather: Weather
     

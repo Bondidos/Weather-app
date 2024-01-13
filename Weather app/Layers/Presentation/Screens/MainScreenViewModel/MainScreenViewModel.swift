@@ -24,11 +24,11 @@ class MainScreenViewModel: ObservableObject {
         
         switch initMainScreen.invoke() {
         case .success(let observable):
-            observable.subscribe { currentWithForecast in
+            observable.subscribe { weatherWithForecast in
                 self.stateData = self.mapper
-                    .setCurrentWetherToState(
-                        currentWeather: currentWithForecast.currentWeather,
-                    mainScreenStateData: self.stateData
+                    .toScreenState(
+                        mainScreenStateData: self.stateData,
+                        weatherWithForecast: weatherWithForecast
                     )
                 
                 self.state = .loaded(self.stateData)
