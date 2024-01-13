@@ -27,8 +27,10 @@ class WeatherRepositoryImpl: WeatherRepository {
             parameters: [
                 ApiParamsKeys.longitude: latlong.longitude,
                 ApiParamsKeys.latitude: latlong.latitude,
-                ApiParamsKeys.measurement: ApiParamsValues.measurementMetric, // TODO: getMetrics from locale
-                ApiParamsKeys.language: "ru", // TODO language from locale
+                ApiParamsKeys.measurement: Locale.current.identifier.contains("en")
+                ? ApiParamsValues.measurementImperial
+                : ApiParamsValues.measurementMetric,
+                ApiParamsKeys.language: Locale.current.identifier,
             ]
         ).map { self.parcer.toCurrentWeather(json: $0) }
     }

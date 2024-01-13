@@ -10,14 +10,13 @@ import SwiftUI
 struct MaxAndMinTempView: View {
     let max: String
     let min: String
+    var maxmin: String {max + "/" + min}
     
     var body: some View {
-        Text("\(max )\u{00B0}/\(min)\u{00B0}")
+        Text(maxmin)
             .font(.title)
             .foregroundColor(.white)
             .fontWeight(.medium)
-            
-            
     }
 }
 

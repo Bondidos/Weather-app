@@ -12,28 +12,30 @@ import RxSwift
 
 class MainScreenViewModel: ObservableObject {
     
-    @Injected var repo: WeatherRepository
-    @Injected var mapper: MainScreenViewMapper
     @Published var state: MainScreenState = .initial
+    @Injected private var mapper: MainScreenViewMapper
+    @Injected private var initMainScreen: InitMainScreenUseCase
     private var stateData: MainScreenStateData = MainScreenStateData.initState()
     
     private let disposeBag = DisposeBag()
     
     func fetchWeather() {
-        do {
-            state = .loading
-            try repo.fetchCurrentWeatherInLocation()
-                .subscribe { currentweather in
-                    self.stateData = self.mapper.setCurrentWetherToState(currentWeather: currentweather, mainScreenStateData: self.stateData)
-                    
-                    self.state = .loaded(self.stateData)
-                } onError: { err in
-                    self.state = .error("SomeNetworkError")
-                }.disposed(by: disposeBag)
+        state = .loading
+        let result = initMainScreen.invoke()
+        
+        switch initMainScreen.invoke() {
             
-        } catch {
-            // location error
-            print(error)
+        case .success(let observable):
+            observable.subscribe { currentweather in
+                self.stateData = self.mapper.setCurrentWetherToState(currentWeather: currentweather, mainScreenStateData: self.stateData)
+                
+                self.state = .loaded(self.stateData)
+            } onError: { err in
+                self.state = .error("SomeNetworkError")
+            }
+            .disposed(by: disposeBag)
+            
+        case .failed(let error): print(error)// TODO: Show SnackBar (LocationError)
         }
     }
 }

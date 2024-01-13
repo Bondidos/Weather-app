@@ -11,7 +11,7 @@ struct CurrentTemp: View {
     let temp: String
     
     var body: some View {
-        Text("\(temp)\u{00B0}")
+        Text(temp)
             .font(.system(size: 60))
             .foregroundColor(.white)
             .fontWeight(.medium)

@@ -14,9 +14,9 @@ struct MainScreenViewMapper {
     ) -> MainScreenStateData {
         mainScreenStateData.copyWith(
             title: currentWeather.name,
-            currentTemp: String(format: "%.0f", currentWeather.temp),
-            maxTemp: String(format: "%.0f", currentWeather.tempMax),
-            minTemp: String(format: "%.0f", currentWeather.tempMin),
+            currentTemp: String(format: "%.0f", currentWeather.temp) + addTempSymbol(),
+            maxTemp: String(format: "%.0f", currentWeather.tempMax) + addTempSymbol(),
+            minTemp: String(format: "%.0f", currentWeather.tempMin) + addTempSymbol(),
             description: currentWeather.weather.description,
             image: ImageResource(name: currentWeather.weather.icon, bundle: .main),
             date: timeStampToFormattedString(timeStamp: currentWeather.timeStamp)
@@ -30,5 +30,11 @@ struct MainScreenViewMapper {
         dateFormatter.timeStyle = .none
         dateFormatter.locale = Locale.current
         return dateFormatter.string(from: date)
+    }
+    
+    private func addTempSymbol() -> String {
+        return Locale.current.identifier.contains("en")
+        ? "\u{00B0}F"
+        : "\u{00B0}C"
     }
 }

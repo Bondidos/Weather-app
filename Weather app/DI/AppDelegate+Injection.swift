@@ -31,7 +31,7 @@ extension Resolver {
     }
     
     public static func registerUseCases() {
-        
+        register {InitMainScreenUseCase(repo: resolve())}
     }
     
     public static func registerUiMapper() {
