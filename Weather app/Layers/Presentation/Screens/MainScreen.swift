@@ -36,7 +36,7 @@ struct MainScreen: View {
                 )
                 Spacer(minLength: 10)
                 Divider()
-                HourlyForecastCarousel()
+                HourlyForecastCarousel(hourlyForecast: state.hourlyForecast)
                 Divider()
                 DailyForecstList(dailyForecast: state.dailyForecast)
             }

@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct HourlyForecastCarousel: View {
+    let hourlyForecast: [HourlyForecastStateData]
+
     var body: some View {
         let itemWidth = UIScreen.main.bounds.width / 4
         let itemHeight = UIScreen.main.bounds.height / 4
 
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                //todo get hourlyForecastList and iterate
-                ForEach([1,2,3,4,5,6,7,8,9], id: \.self) { _ in
+                ForEach(hourlyForecast, id: \.self.id) { forecast in
                     HourlyWeatherItem(
-                        time: "04:00 PM",
-                        icon: ._02N,
-                        description: "few clouds",
-                        temperature: "47"
+                        time: forecast.time,
+                        icon: forecast.icon,
+                        description: forecast.description,
+                        temperature: forecast.temp
                     ).padding()
                         .frame(width: itemWidth, height: itemHeight)
                 }

@@ -18,9 +18,10 @@ struct MainScreenStateData {
     let image: ImageResource
     let date: String
     let dailyForecast: [DailyForecastStateData]
+    let hourlyForecast: [HourlyForecastStateData]
     
     static func initState() -> MainScreenStateData {
-        MainScreenStateData(title: "", currentTemp: "", maxTemp: "", minTemp: "", description: "", image: ._01D, date: "", dailyForecast: [])
+        MainScreenStateData(title: "", currentTemp: "", maxTemp: "", minTemp: "", description: "", image: ._01D, date: "", dailyForecast: [], hourlyForecast: [])
     }
     
     func copyWith(
@@ -31,7 +32,8 @@ struct MainScreenStateData {
         description: String? = nil,
         image: ImageResource? = nil,
         date: String? = nil,
-        dailyForecast: [DailyForecastStateData]? = nil
+        dailyForecast: [DailyForecastStateData]? = nil,
+        hourlyForecast: [HourlyForecastStateData]? = nil
     ) -> MainScreenStateData {
         MainScreenStateData(
             title: title ?? self.title,
@@ -41,7 +43,8 @@ struct MainScreenStateData {
             description: description ?? self.description,
             image: image ?? self.image,
             date: date ?? self.date,
-            dailyForecast: dailyForecast ?? self.dailyForecast
+            dailyForecast: dailyForecast ?? self.dailyForecast,
+            hourlyForecast: hourlyForecast ?? self.hourlyForecast
         )
     }
 }
@@ -51,5 +54,13 @@ struct DailyForecastStateData: Identifiable {
     let date: String
     let description: String
     let icon: ImageResource
+    let temp: String
+}
+
+struct HourlyForecastStateData: Identifiable {
+    let id: Int
+    let time: String
+    let icon: ImageResource
+    let description: String
     let temp: String
 }

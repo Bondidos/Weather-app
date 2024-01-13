@@ -15,7 +15,25 @@ struct MainScreenViewMapper {
     ) -> MainScreenStateData {
         var state = setCurrentWetherToState(currentWeather: weatherWithForecast.currentWeather, mainScreenStateData: mainScreenStateData)
         state = setDailyForecast(mainScreenStateData: state, dailyForecastList: weatherWithForecast.dailyForecast)
+        state = setHourlyForecast(hourlyForecast: weatherWithForecast.hourlyForecast, mainScreenStateData: state)
         return state
+    }
+    
+    private func setHourlyForecast(
+        hourlyForecast: Array<HourlyForecast>,
+        mainScreenStateData: MainScreenStateData
+    ) -> MainScreenStateData {
+        var forecast = hourlyForecast.enumerated().map { (index, item) in
+            HourlyForecastStateData(
+                id: index,
+                time: timeStampToFormattedTimeString(timeStamp: item.timeStamp),
+                icon: imageRecourseFromString(source: item.weather.icon),
+                description: item.weather.description,
+                temp: formatTemp(source: item.temp)
+            )
+        }
+        forecast.removeFirst()
+        return mainScreenStateData.copyWith(hourlyForecast: Array(forecast.prefix(24)))
     }
     
     private func setCurrentWetherToState(
@@ -59,6 +77,15 @@ struct MainScreenViewMapper {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale.current
+        return dateFormatter.string(from: date)
+    }
+    
+    private func timeStampToFormattedTimeString(timeStamp: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(Double(timeStamp)))
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .short
         dateFormatter.locale = Locale.current
         return dateFormatter.string(from: date)
     }
