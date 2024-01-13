@@ -14,6 +14,7 @@ extension Resolver: ResolverRegistering {
         registerServices()
         registerRepository()
         registerUseCases()
+        registerUiMapper()
     }
 }
 
@@ -31,5 +32,11 @@ extension Resolver {
     
     public static func registerUseCases() {
         
+    }
+    
+    public static func registerUiMapper() {
+        register {
+            MainScreenViewMapper()
+        }
     }
 }

@@ -13,7 +13,6 @@ class WeatherRepositoryParcer {
         let main = json["main"] as! Dictionary<String, Any>
         let weather = json["weather"] as! Array<Any>
         let currentWeather = weather.first as! Dictionary<String, Any>
-        
         return CurrentWeather(
             timeStamp: json["dt"] as! Int,
             name: json["name"] as! String,

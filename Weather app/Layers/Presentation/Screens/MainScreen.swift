@@ -25,17 +25,16 @@ struct MainScreen: View {
                 }
         case .loading:
             ProgressView()
-        case .loaded(let currentWeather):
+        case .loaded(let state):
             ScrollView {
-                //TODO: MAPP IN VIEWMODEL
                 CurrentWeatherView(
-                    title: currentWeather.name,
-                    currentTemp: String(currentWeather.temp.rounded()),
-                    maxTemp: String(currentWeather.tempMax.rounded()),
-                    minTemp: String(currentWeather.tempMin.rounded()),
-                    description: currentWeather.weather.description,
-                    image: ImageResource(name: currentWeather.weather.icon, bundle: .main),
-                    date: DateFormatter().string(from: Date(timeIntervalSince1970: Double(currentWeather.timeStamp)))
+                    title: state.title,
+                    currentTemp: state.currentTemp,
+                    maxTemp: state.maxTemp,
+                    minTemp: state.minTemp,
+                    description: state.description,
+                    image: state.image,
+                    date: state.date
                 )
                 Spacer(minLength: 10)
                 Divider()

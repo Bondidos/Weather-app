@@ -9,12 +9,13 @@ import Foundation
 import Resolver
 import RxSwift
 
-enum MainScreenState { case initial, loading, loaded(CurrentWeather), error(String) }
 
 class MainScreenViewModel: ObservableObject {
     
     @Injected var repo: WeatherRepository
+    @Injected var mapper: MainScreenViewMapper
     @Published var state: MainScreenState = .initial
+    private var stateData: MainScreenStateData = MainScreenStateData.initState()
     
     private let disposeBag = DisposeBag()
     
@@ -23,7 +24,9 @@ class MainScreenViewModel: ObservableObject {
             state = .loading
             try repo.fetchCurrentWeatherInLocation()
                 .subscribe { currentweather in
-                    self.state = .loaded(currentweather)
+                    self.stateData = self.mapper.setCurrentWetherToState(currentWeather: currentweather, mainScreenStateData: self.stateData)
+                    
+                    self.state = .loaded(self.stateData)
                 } onError: { err in
                     self.state = .error("SomeNetworkError")
                 }.disposed(by: disposeBag)
