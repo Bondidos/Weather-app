@@ -20,12 +20,50 @@ class WeatherRepositoryParcer {
             feelsLike: main["feels_like"] as! Double,
             tempMin: main["temp_min"] as! Double,
             tempMax: main["temp_max"] as! Double,
-            weather: Weather(
-                id: currentWeather["id"] as! Int,
-                main: currentWeather["main"] as! String,
-                description: currentWeather["description"] as! String,
-                icon: currentWeather["icon"] as! String
+            weather: toWeather(source: currentWeather)
+        )
+    }
+    
+    func toWeatherForecast(json: Dictionary<String, Any>) -> WeatherForecast {
+        let hourly = json["hourly"] as! Array<Any>
+        let daily = json["daily"] as! Array<Any>
+        
+        let hourlyForecast = hourly.map { item in
+            let castedItem = item as! Dictionary<String, Any>
+            let weatherlist = castedItem["weather"] as! Array<Any>
+            return HourlyForecast(
+                timeStamp: castedItem["dt"] as! Int,
+                temp: castedItem["temp"] as! Double,
+                weather: toWeather(source: weatherlist.first as! Dictionary<String, Any>)
             )
+        }
+        let dailyForecast = daily.map { item in
+            let castedItem = item as! Dictionary<String, Any>
+            let weatherlist = castedItem["weather"] as! Array<Any>
+            let temp = castedItem["temp"] as! Dictionary<String, Any>
+            return DailyForecast(
+                timeStamp: castedItem["dt"] as! Int,
+                minTemp: temp["min"] as! Double,
+                maxTemp: temp["max"] as! Double,
+                weather: toWeather(source: weatherlist.first as! Dictionary<String, Any>)
+            )
+        }
+        return WeatherForecast(hourly: hourlyForecast, daily: dailyForecast)
+    }
+    
+    private func toWeatherlist(weatherlist: Array<Any>) -> [Weather]{
+        weatherlist.map { item in
+            let castedItem = item as! Dictionary<String, Any>
+            return toWeather(source: castedItem)
+        }
+    }
+    
+    private func toWeather(source: Dictionary<String, Any>) -> Weather {
+        Weather(
+            id: source["id"] as! Int,
+            main: source["main"] as! String,
+            description: source["description"] as! String,
+            icon: source["icon"] as! String
         )
     }
 }

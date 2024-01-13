@@ -9,6 +9,6 @@ import Foundation
 import RxSwift
 
 enum InitMainScreenResult {
-    case success(Observable<CurrentWeather>)
+    case success(Observable<WeatherCurrentWithForecast>)
     case failed(String)
 }

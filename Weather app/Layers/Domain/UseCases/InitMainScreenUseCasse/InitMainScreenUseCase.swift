@@ -17,8 +17,18 @@ final class InitMainScreenUseCase {
     
     func invoke() -> InitMainScreenResult {
         do {
-            let observable = try repo.fetchCurrentWeatherInLocation()
-            return InitMainScreenResult.success(observable)
+            let currentWeather = try repo.fetchCurrentWeatherInLocation()
+            let weatherForecast = try repo.fetchHourlyWeatherForecast()
+            let result = Observable
+                .zip(currentWeather, weatherForecast)
+                .map { (current, foreast) in
+                WeatherCurrentWithForecast(
+                    currentWeather: current,
+                    dailyForecast: foreast.daily,
+                    hourlyForecast: foreast.hourly
+                )
+            }
+            return InitMainScreenResult.success(result)
         } catch {
             return InitMainScreenResult.failed(error.localizedDescription)
         }

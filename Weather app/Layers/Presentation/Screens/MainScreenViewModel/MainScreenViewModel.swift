@@ -21,20 +21,21 @@ class MainScreenViewModel: ObservableObject {
     
     func fetchWeather() {
         state = .loading
-        let result = initMainScreen.invoke()
         
         switch initMainScreen.invoke() {
-            
         case .success(let observable):
-            observable.subscribe { currentweather in
-                self.stateData = self.mapper.setCurrentWetherToState(currentWeather: currentweather, mainScreenStateData: self.stateData)
+            observable.subscribe { currentWithForecast in
+                self.stateData = self.mapper
+                    .setCurrentWetherToState(
+                        currentWeather: currentWithForecast.currentWeather,
+                    mainScreenStateData: self.stateData
+                    )
                 
                 self.state = .loaded(self.stateData)
             } onError: { err in
                 self.state = .error("SomeNetworkError")
             }
             .disposed(by: disposeBag)
-            
         case .failed(let error): print(error)// TODO: Show SnackBar (LocationError)
         }
     }
