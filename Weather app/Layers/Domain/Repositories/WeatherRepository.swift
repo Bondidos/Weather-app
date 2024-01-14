@@ -11,4 +11,5 @@ import RxSwift
 protocol WeatherRepository {
     func fetchCurrentWeatherInLocation() throws -> Observable<CurrentWeather>
     func fetchHourlyWeatherForecast() throws -> Observable<WeatherForecast>
+    func fetchCurrentWeatherByLatLng(latLng: LatLng) -> Observable<CurrentWeather>
 }

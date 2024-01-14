@@ -29,7 +29,7 @@ struct CurrentWeatherView: View {
     }
 }
 
-private struct LastUpdateTimeView: View {
+struct LastUpdateTimeView: View {
     let date: String
     
     var body: some View {

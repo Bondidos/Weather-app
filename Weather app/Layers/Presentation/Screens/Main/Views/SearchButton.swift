@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct SearchButton: View {
-    @State var isShowSearchSheet = false
-    
+    @Binding var navStack: [ScreensStack]
+
     var body: some View {
         VStack {
             Spacer()
             HStack {
                 Spacer()
                 Button(action: {
-                    isShowSearchSheet = true
+                    navStack.append(.searchScreen)
                 }, label: {
                     ZStack {
                         Circle()
@@ -30,9 +30,6 @@ struct SearchButton: View {
                             .frame(width: 30,height: 30)
                     }
                 })
-                .sheet(isPresented: $isShowSearchSheet) {
-                    SearchSheetScreen()
-                }
             }
         }
         .padding([.trailing], 20)

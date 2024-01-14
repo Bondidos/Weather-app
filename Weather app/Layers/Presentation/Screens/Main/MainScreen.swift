@@ -10,6 +10,7 @@ import SwiftUI
 struct MainScreen: View {
     
     @ObservedObject var mainScreenViewModel = MainScreenViewModel()
+    @Binding var navStack: [ScreensStack]
     
     var state: MainScreenState {
         mainScreenViewModel.state
@@ -41,7 +42,7 @@ struct MainScreen: View {
                     Divider()
                     DailyForecstList(dailyForecast: state.dailyForecast)
                 }
-                SearchButton()
+                    SearchButton(navStack: $navStack)
             }
             .frame(maxWidth: .infinity,maxHeight: .infinity)
             .background(.mainBlue)
@@ -49,10 +50,4 @@ struct MainScreen: View {
             Text(err)
         }
     }
-}
-
-#Preview {
-    MainScreen(
-        mainScreenViewModel: MainScreenViewModel()
-    )
 }

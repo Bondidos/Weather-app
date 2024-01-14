@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MainScreenViewMapper {
+class MainScreenViewMapper {
     
     func toScreenState(
         mainScreenStateData: MainScreenStateData,
@@ -68,11 +68,11 @@ struct MainScreenViewMapper {
         return mainScreenStateData.copyWith(dailyForecast: forecast)
     }
     
-    private func imageRecourseFromString(source: String) -> ImageResource {
+    func imageRecourseFromString(source: String) -> ImageResource {
         ImageResource(name: source, bundle: .main)
     }
     
-    private func timeStampToFormattedString(timeStamp: Int) -> String {
+    func timeStampToFormattedString(timeStamp: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(timeStamp))
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
@@ -90,7 +90,7 @@ struct MainScreenViewMapper {
         return dateFormatter.string(from: date)
     }
     
-    private func formatTemp(source: Double) -> String {
+    func formatTemp(source: Double) -> String {
         String(format: "%.0f", source) + addTempSymbol()
     }
     

@@ -46,6 +46,18 @@ class WeatherRepositoryImpl: WeatherRepository {
         ).map { self.parcer.toWeatherForecast(json: $0 as! Dictionary<String, Any>)}
     }
     
+    func fetchCurrentWeatherByLatLng(latLng: LatLng) -> Observable<CurrentWeather> {
+        return apiService.request(
+            WeatherApiEndpoints.currentWeatherInLocation,
+            parameters: [
+                ApiParamsKeys.longitude: latLng.longitude,
+                ApiParamsKeys.latitude: latLng.latitude,
+                ApiParamsKeys.measurement: mesurement,
+                ApiParamsKeys.language: Locale.current.identifier,
+            ]
+        ).map { self.parcer.toCurrentWeather(json: $0 as! Dictionary<String, Any>) }
+    }
+    
     private func getLocation() throws -> LatLng {
         guard let latlong = locationService.getLatLong() else { throw CustomErrors.invalidLatLong }
         return latlong

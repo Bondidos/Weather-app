@@ -11,6 +11,7 @@ import RxSwift
 struct SearchSheetScreen: View {
     @ObservedObject var viewModel = SearchSheetScreenViewModel()
     @State var city: String = ""
+    @Binding var navStack: [ScreensStack]
     
     var body: some View {
         VStack {
@@ -25,31 +26,14 @@ struct SearchSheetScreen: View {
                 .border(.white, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
                 .shadow(radius: 5)
                 .padding()
-            ScrollView {
-                ForEach(viewModel.cities, id: \.self.id) { cityModel in
-                    Button(action: {
-                        viewModel.onTap(city: cityModel)
-                    }, label: {
-                        VStack (alignment: .leading) {
-                            Text(cityModel.name)
-                                .font(.title)
-                                .foregroundColor(.white)
-                            Text(cityModel.country)
-                                .lineLimit(1)
-                        }
-                        .padding(.top, 10)
-                    }).frame(alignment: .leading)
+            List(viewModel.cities) { item in
+                Button(item.name + " " + item.country) {
+                    navStack.append(.cityWeather(item))
                 }
-                
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding([.leading,.trailing])
         }
         .frame(maxWidth: .infinity,maxHeight: .infinity)
         .background(.mainBlue)
+        .scrollContentBackground(.hidden)
     }
-}
-
-#Preview {
-    SearchSheetScreen()
 }
